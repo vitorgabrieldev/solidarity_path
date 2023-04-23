@@ -17,7 +17,7 @@
                       <div class="drop-down__menu-box">
                         <ul class="drop-down__menu">
                           <li data-name="profile" class="drop-down__item">Histórico <i class='bx bx-history'></i></li>
-                          <li data-name="dashboard" class="drop-down__item">Config <i class='bx bxs-cog'></i></li>
+                          <li onclick="redirectEditAccount()" data-name="dashboard" class="drop-down__item">Edit <i class='bx bx-edit-alt'></i></li>
                           <li onclick="logoutAJAX()" data-name="activity" class="drop-down__item">Sair <i class='bx bxs-log-out'></i></li>
                         </ul>
                       </div>
@@ -31,4 +31,7 @@
                         $('.drop-down').toggleClass('drop-down--active');
                     });
                 });
+                function redirectEditAccount() {
+                  window.location = "editAccount.html";
+                };
              </script>

@@ -2,7 +2,6 @@ body, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-   background: linear-gradient(90deg,#f9fbf7, #C9D8FF);
 }
 * {
     font-family: Roboto, Arial, sans-serif;
@@ -250,3 +249,4 @@ opacity: 1;
 .hidden {
   display: none;
 }
+

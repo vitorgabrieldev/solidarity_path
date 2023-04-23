@@ -1,6 +1,6 @@
 <?php
 
-    include_once('../../../process/connectDB.php');
+    include_once('connectDB.php');
 
     $dataJSON = $_POST['data'];
 
@@ -10,16 +10,21 @@
         session_start();
     };
 
-    $username = $data['username'];
-    $cep = $data['cep'];
+    $email = $data['email'];
+    $dob = $data['dob'];
+    $CPF = $data['CPF'];
+    $fullName = $data['fullName'];
+    $niss = $data['niss'];
+    $CEP = $data['CEP'];
     $city = $data['city'];
-    $raf = $data['raf'];
+    $RAF = $data['RAF'];
 
     $emailUser = $_SESSION['email'];
 
-    $update = mysqli_query($mysqli, "UPDATE usuarios SET Username='$username', CEP='$cep',city='$city',RAF='$raf'
+    $update = mysqli_query($mysqli, "UPDATE usuarios SET Email='$email', CEP='$CEP',city='$city',RAF='$RAF',
+                                      Dob='$dob', NIS='$niss',CPF='$CPF',fullName='$fullName'
                                       WHERE Email = '$emailUser';");
 
-    echo 'Sucess';
+    echo 'Ok';
 
 ?>

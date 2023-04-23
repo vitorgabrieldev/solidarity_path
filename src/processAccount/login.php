@@ -32,6 +32,8 @@
             $_SESSION['fullName'] = $datasRow['fullName'];
             $_SESSION['cpf'] = $datasRow['CPF'];
             $_SESSION['CEP'] = $datasRow['CEP'];
+            $_SESSION['nis'] = $datasRow['NIS'];
+
 
             echo 'Sucess';
         } else {

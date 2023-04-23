@@ -58,6 +58,7 @@
         $_SESSION['fullName'] = $res['fullName'];
         $_SESSION['cpf'] = $res['CPF'];
         $_SESSION['CEP'] = $res['CEP'];
+        $_SESSION['nis'] = $res['NIS'];
 
         echo 'Sucess';
 

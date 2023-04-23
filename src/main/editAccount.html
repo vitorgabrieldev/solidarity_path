@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+    <title>Solidarity Path</title>
+
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+
+    <!-- | -- Require Meta Tags -- | -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- | -- Style Sheets -- | -->
+    <link rel="stylesheet" href="./css/editAccount.css">
+
+    <!-- | -- Imports -- | -->
+    <script src="../lib/js/jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <style>
+      .linkBack {
+        font-size: 1.5rem;
+        color: #474747;
+      }
+    </style>
+
+</head>
+<body>
+    <!-- | -- Componnets -- | -->
+    <a class="linkBack" href="./index.html">&lt;-Voltar</a>
+    <div class="containerCardsEditDATA">
+        <div class="main-block">
+            <h1>Login</h1>
+            <form style="text-align: center;" id="loadPicture" method="POST">
+              <hr>
+              <input type='file' name="imgInp" accept="image/x-png,image/jpeg" id="imgInp" />
+              <hr>
+              <div class="preloadPicture"></div>
+              <div class="btn-block">
+                <button type="button" onclick="updatePicture()">Salvar imagem</button>
+              </div>
+            </form>
+        </div>
+        <div class="main-block">
+            <h1>Informações pessoais</h1>
+            <form method="POST">
+              <hr>
+              <label id="icon" for="name"><i class="fas fa-envelope"></i></label>
+              <input type="text" name="name" id="emailInput" placeholder="E-mail" required/>
+              <label id="icon" for="name"><i class='bx bxs-cake'></i></label>
+              <input type="date" name="name" id="dateInput" placeholder="Localização" required/>
+              <label id="icon" for="name"><i class='bx bxs-wallet-alt'></i></label>
+              <input type="number" name="name" id="cpfInput" placeholder="CPF" required/>
+              <label id="icon" for="name"><i class='bx bx-user'></i></label>
+              <input type="text" name="name" id="fullNameInput" placeholder="Nome completo" required/>
+              <label id="icon" for="name"><i class='bx bx-user'></i></label>
+              <input type="number" name="name" id="nissInput" placeholder="Nis" required/>
+              <hr>
+              <div class="btn-block">
+                <p>Veja como esses dados são usados <a href="#">política de privacidade</a>.</p>
+              </div>
+            </form>
+        </div>
+        <div class="main-block">
+            <h1>Localização</h1>
+            <hr>
+            <form id="formRegister" method="POST">
+              <hr>
+              <label id="icon" for="name"><i class='bx bxs-wallet-alt'></i></label>
+              <input type="text" name="name" id="CEPInput" onchange="completeValueInputs()" placeholder="CEP" required/><br><br>
+                <p>Moro em zona rural, <a href="#">Cadastrar minha localização</a> na secretária de Agricultura do estado</p>
+              <label id="icon" for="name"><i class='bx bx-map'></i></label>
+              <input disabled class="disabled" type="text" name="name" id="cityInput" placeholder="Cidade (Próxima)" required/>
+              <label id="icon" for="name"><i class='bx bx-map'></i></label>
+              <input disabled class="disabled" type="text" name="name" id="RAFInput" placeholder="Rua / Avenida / Fazenda" required/>
+              <hr>
+              <div class="btn-block">
+                <p>Esses dados serão essenciais para o bom funcionamento do sistema, insira-os corretamente <a href="#">Termos de uso</a>.</p>
+                <button type="button" onclick="updateData()">Salvar dados</button>
+            </div>
+            </form>
+        </div>
+    </div>
+    <h1 id="res"></h1>
+
+    <script type="text/javascript">
+        
+      const updatePicture = () => {
+        let picture = $('#pictureImg').val();
+        $('#preloadPicture').html(`<img src="${picture}">`);
+      };
+
+        function previewUpload(input) {
+          if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function(e) {
+                  $('#userImg').attr('src', e.target.result);
+                  var formData = new FormData($("#uploadPic")[0]);
+                  $.ajax({
+                      type: 'post',
+                      url: 'php/updatePicture.php',
+                      data: formData,
+                      cache: false,
+                      contentType: false,
+                      processData: false,
+                      error: function (error) {
+                          alert('Error');
+                      }
+                  });
+              }
+              reader.readAsDataURL(input.files[0]);
+              }
+          }
+
+          $("#imgInp").change(function() {
+              previewUpload(this);
+          });
+
+
+        const updateData = async() => {
+            let data = await requestDatas();
+            if(parseInt(data.dob.substr(0,4)) + 18 <= new Date().getFullYear()) {
+                if(data.CPF.length == 11) {
+                if(data.fullName.length >= 5) {
+                    if (data.fullName.split(" ").length >= 2) {
+                    if(data.niss.length == 11) {
+                        if (data.email) {
+                            validateDATAS(JSON.stringify(data));
+                        } else {
+                            alert('Digite um email válido!');
+                        };
+                    } else {
+                        alert('Digite um NIS válido!');
+                    };
+                    } else {
+                    alert('Digite seu nome inteiro!');
+                    };
+                } else {
+                    alert('Digite seu nome inteiro!');
+                };
+                } else {
+                alert('Insira um CPF válido!');
+                };
+            } else {
+                alert('Você deve ter mais de 18 anos!');
+            };
+        };
+
+        const validateDATAS = (DATA) => {
+            $.ajax({
+                url : 'php/updateAccount.php',
+                type : 'POST',
+                data : {data: DATA},
+                success: (response) => {
+                    if (response == 'Ok') {
+                        window.location = "index.html";
+                    };
+                },
+                error: (response) => {
+                    console.log(response);
+                }, 
+            });
+        };
+
+        const requestDatas = async() => {
+          let data = await requestAPIs($('#CEPInput').val());
+          const requestDatas = {
+            'email': $('#emailInput').val(),
+            'dob': $('#dateInput').val(),
+            'CPF': $('#cpfInput').val(),
+            'fullName': $('#fullNameInput').val(),
+            'niss': $('#nissInput').val(),
+            'CEP': $('#CEPInput').val(),
+            'city': data.city,
+            'RAF': data.rua,
+          };
+          return requestDatas;
+        };
+
+        const completeValues = async(data) => {
+            $('#emailInput').val(data.email);
+            $('#dateInput').val(data.dob);
+            $('#cpfInput').val(data.cpf);
+            $('#fullNameInput').val(data.fullName);
+            $('#nissInput').val(data.nis);
+            $('#CEPInput').val(data.CEP);
+            let api = await requestAPIs(data.CEP);
+            $('#cityInput').val(api.city);
+            $('#RAFInput').val(api.rua);
+        };
+        const requestAPIs = async(requestCEP) => {
+            // -- | -- api locate -- | --
+           if(requestCEP.length !== 8) {
+              alert('Digite um CEP válido');
+           } else {
+              const url = `http://viacep.com.br/ws/${requestCEP}/json/`;
+              const dataMain = await fetch(url);
+              const datasEnd = await dataMain.json();
+              if(datasEnd.hasOwnProperty('erro')) {
+                alert('Digite um CEP válido');
+              } else {
+                let objectDATAS = {
+                  'city': datasEnd.localidade,
+                  'rua': datasEnd.logradouro,
+                };
+                return objectDATAS;
+              };
+           };
+          };
+          const completeValueInputs = async() => {
+          let data = await requestAPIs($('#CEPInput').val());
+          if(data.rua&&data.city) {
+            document.querySelector('#cityInput').value = data.rua;
+            document.querySelector('#RAFInput').value = data.city;
+          } else {
+            document.querySelector('#cityInput').value = "";
+            document.querySelector('#RAFInput').value = "";
+          };
+        };
+         $(document).ready(
+          $.ajax({
+            url: 'php/protect.php',
+            success: (response) => {
+              if(response == 'Erro') {
+                window.location = '../login.html';
+              };
+            },
+            error: (response) => {
+              console.log(response);
+            }
+          })
+        );
+        $(document).ready(
+            $.ajax({
+                url : 'php/requestDATA.php',
+                success : (data) => {
+                    completeValues(JSON.parse(data));
+                },
+                error : (path) => {
+                    console.log(data);
+                },
+            })
+        );
+    </script>
+</body>
+</html>

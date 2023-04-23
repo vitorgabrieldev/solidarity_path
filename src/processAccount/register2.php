@@ -28,6 +28,24 @@
                                                                RAF='$RAF' WHERE
                                                                Email='$emailMove';");
 
+    $email = $_SESSION['email'];
+
+    $query_view = mysqli_query($mysqli, "SELECT * FROM usuarios WHERE Email='$email';");
+
+    $res = $query_view->fetch_assoc();
+
+    $_SESSION['username'] = $data['userName'];
+        $_SESSION['typeuser'] = $data['typeUser'];
+        $_SESSION['email'] = $data['userEmail'];
+        $_SESSION['dateCreation'] = $res['Creation'];
+        $_SESSION['picture'] = $res['Picture'];
+        $_SESSION['dob'] = $res['Dob'];
+        $_SESSION['fullName'] = $res['fullName'];
+        $_SESSION['cpf'] = $res['CPF'];
+        $_SESSION['CEP'] = $res['CEP'];
+        $_SESSION['nis'] = $res['NIS'];
+
+
     echo 'Sucess';
 
 ?>

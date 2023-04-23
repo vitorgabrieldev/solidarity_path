@@ -14,7 +14,6 @@
     <!-- | -- Style Sheets -- | -->
     <link rel="stylesheet" href="../lib/css/fonts.css">
     <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/styleMenu.css">
 
     <!-- | -- Imports -- | -->
     <script src="../lib/js/jquery.js"></script>
@@ -42,7 +41,6 @@
         </div>
         <hr>
     </header>
-    <section id="menuEditAccount"></section>
 
     <script type="text/javascript">
          $(document).ready(
@@ -90,17 +88,6 @@
                 },
             })
         );
-        $(document).ready(
-            $.ajax({
-                url : 'php_components/formEditData.php',
-                success : (response) => {
-                    $('#menuEditAccount').html(response);
-                },
-                error : (response) => {
-                    $('#menuEditAccount').html(response);
-                },
-            })
-        );
         const logoutAJAX = () => {
                 $.ajax({
                   url: 'php/logout.php',
@@ -113,9 +100,6 @@
                     console.log(response);
                   },
                 });
-        };
-        const editAccount = () => {
-            document.querySelector('.containerMenuContent').classList.remove("hidden");
         };
     </script>
 </body>
