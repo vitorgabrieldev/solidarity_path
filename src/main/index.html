@@ -1,14 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Hello, World</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+
+    <title>Solidarity Path</title>
+
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
+
+    <!-- | -- Require Meta Tags -- | -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- | -- Style Sheets -- | -->
+    <link rel="stylesheet" href="../lib/css/fonts.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/styleMenu.css">
+
+    <!-- | -- Imports -- | -->
+    <script src="../lib/js/jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 </head>
 <body>
+    <!-- | -- Componnets -- | -->
     
+    <header class="containerHeader">
+        <div class="content__header">
+            <h1 class="title__header">Solidarity Path</h1>
+            <div class="buttonsFunctions__header">
+                <div id="resButton"></div>
+                <div id="imgContentUser" class="circle__user">
+                    <img class="imgContent" onclick="editAccount()" id="imgProfile" src="" alt="User Image">
+                    <h2 id="nameAccount"></h2>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </header>
+    <section id="menuEditAccount"></section>
+
+    <script type="text/javascript">
+         $(document).ready(
+          $.ajax({
+            url: 'php/protect.php',
+            success: (response) => {
+              if(response == 'Erro') {
+                window.location = '../login.html';
+              };
+            },
+            error: (response) => {
+              console.log(response);
+            }
+          })
+        );
+        const hiddenandshow = () => {
+            if($('#menuMoreOptions').hasClass('hidden')) {
+                $('#menuMoreOptions').removeClass('hidden');
+            } else {
+                $('#menuMoreOptions').addClass('hidden');
+            };
+        };
+        $.ajax({
+            url: 'php_components/button.php',
+            success: (data) => {
+                $('#resButton').html(data);
+            },
+        });
+        $(document).ready(
+            $.ajax({
+                url: 'php/requestName.php',
+                success: (response) => {
+                    $('#nameAccount').text(response);
+                },
+            })
+        );
+        $(document).ready(
+            $.ajax({
+                url : 'php/requestImgProfile.php',
+                success : (path) => {
+                    document.querySelector('#imgProfile').src = `uploads/${path}`;
+                },
+                error : (path) => {
+                    document.querySelector('#imgProfile').src = `uploads/user.jpg}`;
+                },
+            })
+        );
+        $(document).ready(
+            $.ajax({
+                url : 'php_components/formEditData.php',
+                success : (response) => {
+                    $('#menuEditAccount').html(response);
+                },
+                error : (response) => {
+                    $('#menuEditAccount').html(response);
+                },
+            })
+        );
+        const logoutAJAX = () => {
+                $.ajax({
+                  url: 'php/logout.php',
+                  success: (response) => {
+                    if(response === 'Sucess') {
+                        window.location = "../../index.html";
+                    };
+                  },
+                  error: (response) => {
+                    console.log(response);
+                  },
+                });
+        };
+        const editAccount = () => {
+            document.querySelector('.containerMenuContent').classList.remove("hidden");
+        };
+    </script>
 </body>
 </html>
