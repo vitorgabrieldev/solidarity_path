@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+    <!-- |-- Title Page -- | -->
+    <title>solidarity Path - Cadastro</title>
+
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+
+    <!-- | -- Require Meta Tags -- | -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- | -- Import Jquery -- | -->
+    <script src="./lib/js/jquery.js"></script>
+
+    <!-- | -- Others Imports -- | -->
+        <!-- | -- Import - Toast -- | -->
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    
+
+    <!-- | -- Style Sheets -- | -->
+    <link rel="stylesheet" href="./lib/css/fonts.css">
+    <link rel="stylesheet" href="./lib/css/app.css">
+
+    <!-- | -- Import Scripts -- | -->
+
+</head>
+<body>
+    <!-- | -- Components -- | -->
+    <div>
+        <div class="main-block">
+            <h1>Registro</h1>
+            <form id="formRegister" method="POST">
+              <hr>
+              <div class="account-type">
+                <input type="radio" value="doador" id="radioOne" name="account" checked/>
+                <label for="radioOne" class="radio">Doador</label>
+                <input type="radio" value="donatario" id="radioTwo" name="account" />
+                <label for="radioTwo" class="radio">Donatário</label>
+              </div>
+              <hr>
+              <label id="icon" for="name"><i class="fas fa-envelope"></i></label>
+              <input type="text" name="name" id="emailInput" placeholder="E-mail" required/>
+              <label id="icon" for="name"><i class="fas fa-user"></i></label>
+              <input type="text" name="name" id="nameInput" placeholder="Apelido" required/>
+              <label id="icon" for="name"><i class="fas fa-unlock-alt"></i></label>
+              <input type="password" name="name" id="passInput" placeholder="Senha" required/>
+              <hr>
+              <div class="btn-block">
+                <p>Não se preocupe, nosso site é seguro! Ao criar o seu cadastro,
+                você concorda com a nossa<a href="#">política de privacidade</a>.</p>
+                <button type="submit">Continuar</button>
+                <p>Ja possui uma conta em nosso sistema? <a href="./login.html">acessar</a></p>
+            </div>
+            </form>
+        </div>
+        <br>
+        <div id="res"></div>
+    </div>
+
+    <!-- | -- script -- | -->
+    <script type="text/javascript">
+
+        // -- | -- Call_function_render_Page_(Views) -- | --
+        document.querySelector('#formRegister').addEventListener('submit', (evt) => {
+            evt.preventDefault();
+            verifyForm();
+        });
+
+        // -- | -- requesting and preparing data -- | --
+        var verifyForm = () => {
+            let datas = requestDATA();
+            if(datas.userName.length > 40) {
+                $('#res').html('<h1 id="description">O username deve conter até 40 dígitos!</h1>');
+            } else if (datas.userPassword.length >= 4 && datas.userPassword.length <= 32) {
+                processDATA(JSON.stringify(requestDATA()));
+            } else {
+                $('#res').html('<h1 id="description">A senha deve ser entre 4-32 dígitos!');
+            };
+        };
+
+        var requestDATA = () => {
+            var objectValues = {
+                typeUser: $("input[type='radio'][name='account']:checked").val(),
+                userEmail: $('#emailInput').val(),
+                userName: $('#nameInput').val(),
+                userPassword: $('#passInput').val(),
+            };
+            return objectValues;
+        };
+
+        // -- | -- Send data DATABASE -- | --
+        var processDATA = (DATA) => {
+            $.ajax({
+                url: 'processAccount/register.php', // Atenção
+                type: 'POST',
+                data: {data: DATA},
+
+                success: function(data) {
+                    if(data === 'ErrorEmail') {
+                        $('#res').html('<h1 id="description">Email já registrado! é seu? <a class="linkEnter" href="./login.html">entrar</a></h1>');
+                    };
+                    if(data === 'Sucess') {
+                        $('#res').html('<h1 id="description">Você foi registrado com sucesso!</h1>');
+                        startRedirectAnimate();
+                    };
+                },
+                error: function() {
+                    alert('Error');
+                },
+            });
+        };
+
+        function startRedirectAnimate() {
+            window.location = "./register2.html";
+        };
+
+        // -- | -- Sumary Toast -- | --
+        // 1 - notificação
+        // 2 - Aviso
+        // 3 - Erro
+        // 4 - Informações
+    </script>
+</body>
+</html>

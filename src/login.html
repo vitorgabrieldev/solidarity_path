@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+    <!-- |-- Title Page -- | -->
+    <title>solidarity Path - Login</title>
+
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+
+    <!-- | -- Require Meta Tags -- | -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- | -- Import Jquery -- | -->
+    <script src="./lib/js/jquery.js"></script>
+
+    <!-- | -- Others Imports -- | -->
+        <!-- | -- Import - Toast -- | -->
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    
+
+    <!-- | -- Style Sheets -- | -->
+    <link rel="stylesheet" href="./lib/css/fonts.css">
+    <link rel="stylesheet" href="./lib/css/app.css">
+
+    <!-- | -- Import Scripts -- | -->
+
+</head>
+<body>
+    <!-- | -- Components -- | -->
+    <div>
+        <div class="main-block">
+            <h1>Login</h1>
+            <form style="text-align: center;" id="formRegister" method="POST">
+              <hr>
+              <label id="icon" for="name"><i class="fas fa-envelope"></i></label>
+              <input type="text" name="name" id="emailInput" placeholder="E-mail" required/>
+              <label id="icon" for="name"><i class="fas fa-unlock-alt"></i></label>
+              <input type="password" name="name" id="passInput" placeholder="Senha" required/>
+              <p style="cursor: pointer;" id="hiddenAndShow">Mostrar</p>
+              <hr>
+              <div class="btn-block">
+                <p>Bem-vindo novamente, veja nossas atualizações <a href="#">Atualizações</a>.</p>
+                <button type="submit">Continuar</button>
+                <p>Não tem uma conta ainda? <a href="./register1.html">Cadastrar</a></p>
+              </div>
+            </form>
+        </div>
+        <br>
+        <div id="res"></div>
+    </div>
+
+    <!-- | -- script -- | -->
+    <script type="text/javascript">
+
+        document.querySelector('#hiddenAndShow').addEventListener('click', () => {
+            let typeInput = document.querySelector('#passInput');
+            if (typeInput.type == 'password') {
+                typeInput.type = 'text';
+                document.querySelector('#hiddenAndShow').innerHTML = "Esconder";
+            } else {
+                typeInput.type = 'password';
+                document.querySelector('#hiddenAndShow').innerHTML = "Mostrar";
+            };
+        });
+
+        // -- | -- Call_function_render_Page_(Views) -- | --
+        document.querySelector('#formRegister').addEventListener('submit', (evt) => {
+            evt.preventDefault();
+            verifyForm();
+        });
+
+        // -- | -- requesting and preparing data -- | --
+        var verifyForm = () => {
+            let datas = requestDATA();
+            if(datas.userEmail&&datas.userPassword) {
+                processDATA(JSON.stringify(datas));
+            };
+        };
+
+        var requestDATA = () => {
+            var objectValues = {
+                userEmail: $('#emailInput').val(),
+                userPassword: $('#passInput').val(),
+            };
+            return objectValues;
+        };
+
+        // -- | -- Send data DATABASE -- | --
+        var processDATA = (DATA) => {
+            $.ajax({
+                url: 'processAccount/login.php',
+                type: 'POST',
+                data: {data: DATA},
+
+                success: function(data) {
+                    if(data === 'ErrorEmail') {
+                        $('#res').html('<h1 id="description">O e-mail está incorreto!</h1>');
+                    };
+                    if(data === 'ErrorPass') {
+                        $('#res').html('<h1 id="description">A senha está incorreta!</h1>');
+                    };
+                    if(data === 'Sucess') {
+                        $('#res').html('<h1 id="description">Login efetuado com sucesso!</h1>');
+                        startRedirectAnimate();
+                    };
+                },
+                error: function() {
+                    alert('Error');
+                },
+            });
+        };
+
+        function startRedirectAnimate() {
+            let token = 3;
+            setInterval(() => {
+                $('#res').html(`<h1 id="description">Redirecionando em ${token}</h1>`);
+                if(token == 0) {
+                    window.location = "main/index.html";  
+                };
+                token --;
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
